@@ -21,7 +21,6 @@ package lucee.commons.lang;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.UnmodifiableClassException;
 import java.lang.ref.SoftReference;
 import java.net.URL;
@@ -40,7 +39,6 @@ import lucee.commons.io.res.util.ResourceClassLoader;
 import lucee.commons.io.res.util.ResourceUtil;
 import lucee.runtime.config.Config;
 import lucee.runtime.config.ConfigImpl;
-import lucee.runtime.instrumentation.InstrumentationFactory;
 import lucee.runtime.type.util.ArrayUtil;
 import lucee.transformer.bytecode.util.ClassRenamer;
 
@@ -175,20 +173,46 @@ public final class PhysicalClassLoader extends ExtendableClassLoader {
 			}
 			catch (ClassNotFoundException cnf) {}
 			if(clazz==null) return _loadClass(name, barr);
-		
-		// update	
+
+            return rename(clazz, barr);
+
+            // update
+            /*
+             * try { InstrumentationFactory.getInstrumentation(config).redefineClasses(new
+             * ClassDefinition(clazz, barr)); } catch (ClassNotFoundException e) { throw new
+             * RuntimeException(e); } return clazz;
+             */
+        }
+    }
+
+    private Class<?> rename(Class<?> clazz, byte[] barr) {
+        String prefix = clazz.getName();
+        Class<?> clazz2 = null;
+        String newName;
+        int index = 0;
+        do {
+            clazz2 = null;
+            newName = prefix + "$" + (++index);
+
 			try {
-				InstrumentationFactory.getInstrumentation(config).redefineClasses(new ClassDefinition(clazz,barr));
-			} 
-			catch (ClassNotFoundException e) {
-				// the documentation clearly sais that this exception only exists for backward compatibility and never happen
-				throw new RuntimeException(e);
+                clazz2 = loadClass(newName, false, false); // we do not load existing class from disk
 			}
-			return clazz;
+            catch (ClassNotFoundException cnf) {}
 		}
+		while (clazz2 != null);
+		return _loadClass(newName, ClassRenamer.rename(barr, newName));
 	}
-	
-	private Class<?> _loadClass(String name, byte[] barr) {
+
+    /*
+     * private static String namePrefix(String className) { String prefix = className; int index =
+     * prefix.lastIndexOf('$'); if (index == -1 || !Decision.isInteger(prefix.substring(index + 1)))
+     * return prefix;
+     *
+     * return prefix.substring(0, index); }
+     */
+
+
+    private Class<?> _loadClass(String name, byte[] barr) {
 		Class<?> clazz = defineClass(name,barr,0,barr.length);
 		if (clazz != null) {
 			loadedClasses.add(name);
