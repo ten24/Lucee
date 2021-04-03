@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: sun.jai:core:1.2.1.0003L">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/sun/jai/core/1.2.1.0003L/core-1.2.1.0003L.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/sun/jai/core/1.2.1.0003L/core-1.2.1.0003L-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/sun/jai/core/1.2.1.0003L/core-1.2.1.0003L-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: metadata:extractor:2.8.1.0002L">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/metadata/extractor/2.8.1.0002L/extractor-2.8.1.0002L.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/metadata/extractor/2.8.1.0002L/extractor-2.8.1.0002L-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/metadata/extractor/2.8.1.0002L/extractor-2.8.1.0002L-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

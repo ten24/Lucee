@@ -22,8 +22,8 @@ public class IKHandlerCache implements IKHandler {
 	@Override
 	public IKStorageValue loadData(PageContext pc, String appName, String name, String strType, int type, Log log) throws PageException	{
 		Cache cache = getCache(pc,name);
-		String key=getKey(pc.getCFID(),appName,strType);
-		synchronized (cache) { // sync necessary?
+        String key = StorageScopeCache.getKey(pc.getCFID(), appName, strType);
+        synchronized (StorageScopeCache.getToken(key)) { // sync necessary?
 			Object val = cache.getValue(key,null);
 			if(val instanceof byte[][]) {
 				ScopeContext.info(log,"load existing data from  cache ["+name+"] to create "+strType+" scope for "+pc.getApplicationContext().getName()+"/"+pc.getCFID());
@@ -45,9 +45,9 @@ public class IKHandlerCache implements IKHandler {
 			MapPro<Collection.Key,IKStorageScopeItem> data, Log log) {
 		try {
 			Cache cache = getCache(ThreadLocalPageContext.get(pc), name);
-			String key=getKey(cfid, appName, storageScope.getTypeAsString());
-			
-			synchronized (cache) {
+			String key=StorageScopeCache.getKey(cfid, appName, storageScope.getTypeAsString());
+
+            synchronized (StorageScopeCache.getToken(key)) {
 				Object existingVal = cache.getValue(key,null);
 				
 				// FUTURE add IKStorageValue to loader and then the byte array impl is no longer needed
@@ -79,9 +79,9 @@ public class IKHandlerCache implements IKHandler {
 	public void unstore(IKStorageScopeSupport storageScope, PageContext pc, String appName, String name, String cfid, Log log) {
 		try {
 			Cache cache = getCache(pc, name);
-			String key=getKey(cfid, appName, storageScope.getTypeAsString());
-			
-			synchronized (cache) {cache.remove(key);}
+			String key=StorageScopeCache.getKey(cfid, appName, storageScope.getTypeAsString());
+
+            synchronized (StorageScopeCache.getToken(key)) {cache.remove(key);}
 		} 
 		catch (Exception pe) {}
 	}
@@ -99,9 +99,6 @@ public class IKHandlerCache implements IKHandler {
 		}
 	}
 
-	private static String getKey(String cfid, String appName, String type) {
-		return new StringBuilder("lucee-storage:").append(type).append(":").append(cfid).append(":").append(appName).toString().toUpperCase();
-	}
 
 	@Override
 	public String getType() {
