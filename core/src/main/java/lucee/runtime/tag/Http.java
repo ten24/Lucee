@@ -1426,7 +1426,7 @@ public final class Http extends BodyTagImpl {
 	private void ssl(HttpClientBuilder builder) throws PageException {
 		try {
 			// SSLContext sslcontext = SSLContexts.createSystemDefault();
-			SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+			SSLContext sslcontext = SSLContext.getInstance("TLS");
 			if(!StringUtil.isEmpty(this.clientCert)) {
 				if(this.clientCertPassword == null)
 					this.clientCertPassword = "";
