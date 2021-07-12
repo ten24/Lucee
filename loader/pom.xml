@@ -3,7 +3,7 @@
 
   <groupId>org.lucee</groupId>
   <artifactId>lucee</artifactId>
-  <version>5.2.9.31-TEN24-2</version>
+  <version>5.2.9.31-TEN24-3</version>
   <packaging>jar</packaging>
 
   <name>Lucee Loader Build</name>
